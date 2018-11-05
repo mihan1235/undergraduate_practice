@@ -5,8 +5,67 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:undergraduate_practice"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="MainWindow" Height="550" Width="800">
+    <TabControl>
+        <TabItem>
+            <TabItem.Header>
+                InverseProblem
+            </TabItem.Header>
+            <TabItem.Content>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                </Grid>
+            </TabItem.Content>
+        </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                Data
+            </TabItem.Header>
+            <TabItem.Content>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="t:"
+                           HorizontalAlignment="Center"></Label>
+
+                    <ListBox Name="t_array"
+                             Grid.Row="1"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    </ListBox>
+                    <Label Content="g1(t):"
+                           HorizontalAlignment="Center"
+                           Grid.Column="1"></Label>
+
+                    <ListBox Name="g1_array"
+                             Grid.Row="1"
+                             Grid.Column="1"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    </ListBox>
+                    <Label Content="g2(t):"
+                           HorizontalAlignment="Center"
+                           Grid.Column="2"></Label>
+
+                    <ListBox Name="g2_array"
+                             Grid.Row="1"
+                             Grid.Column="2"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    </ListBox>
+                </Grid>
+            </TabItem.Content>
+        </TabItem>
+    </TabControl>
 </Window>
