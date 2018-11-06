@@ -59,10 +59,44 @@ namespace undergraduate_practice
             InitializeComponent();
         }
 
+        public class NumratedData
+        {
+            public int num
+            {
+                get;
+                set;
+            }
+            public double obj
+            {
+                get;
+                set;
+            }
+            public NumratedData(int num, double obj)
+            {
+                this.num = num;
+                this.obj = obj;
+            }
+            public override string ToString()
+            {
+                return num.ToString() + ": " + obj.ToString();
+            }
+        }
+
+        List<NumratedData> ConvertToNumerated(List<double> list)
+        {
+            List<NumratedData> list_num = new List<NumratedData>();
+            int i = 0;
+            foreach (var obj in list)
+            {
+                i++;
+                list_num.Add(new NumratedData(i,obj));
+            }
+            return list_num;
+        }
 
         private void CountButton_Click(object sender, RoutedEventArgs e)
         {
-
+            
             try
             {
                 double t0 = double.Parse(this.t0.Text);
@@ -74,9 +108,9 @@ namespace undergraduate_practice
                 task.SolveUsingRiemannSum(out List<double> g1, out List<double> g2, out t_arr);
                 var Model = (MainViewModel)this.DataContext;
                 Model.UpdateModel(g1, g2, t_arr, task.T0, task.T1, task.GridSpacing);
-                t_array.ItemsSource = t_arr;
-                g1_array.ItemsSource = g1;
-                g2_array.ItemsSource = g2;
+                t_array.ItemsSource = ConvertToNumerated(t_arr.ToList());
+                g1_array.ItemsSource = ConvertToNumerated(g1);
+                g2_array.ItemsSource = ConvertToNumerated(g2);
             }
             catch{
 
