@@ -51,6 +51,9 @@
                                     </TextBox>
                                 </DockPanel>
                             </Border>
+                            <CheckBox x:Name="checkBox1" 
+                                      IsChecked="False"
+                                      Content="Old mode" />
                             <Button  Content="Count" Margin="12" HorizontalAlignment="Center"
                                      Name="CountButton" Click="CountButton_Click"></Button>
                         </StackPanel>

@@ -138,6 +138,75 @@ namespace undergraduate_practice
             g_1.Add(Phi1(t[0]));
             g_2.Add(Phi2(t[0]));
 
+            double A(double t_i)
+            {
+                return 1 - h * K11(t_i, t_i);
+            }
+
+            double B(double t_i)
+            {
+                return - h * K12(t_i, t_i);
+            }
+
+            double C(double t_i)
+            {
+                return - h * K21(t_i, t_i);
+            }
+
+            double D(double t_i)
+            {
+                return 1 - h * K22(t_i, t_i);
+            }
+
+            double E(int i, ref List<double> g1, ref List<double> g2, ref double[] t_arr)
+            {
+                double sum = 0;
+                for (int j = 1; j <= i - 1; j++)
+                {
+                    sum += h * K11(t_arr[i], t_arr[j]) * g1.ElementAt(j);
+                    sum += h * K12(t_arr[i], t_arr[j]) * g2.ElementAt(j);
+                }
+                sum += Phi1(t_arr[i]);
+                return sum;
+            }
+
+            double F(int i, ref List<double> g1, ref List<double> g2, ref double[] t_arr)
+            {
+                double sum = 0;
+                for (int j = 1; j <= i - 1; j++)
+                {
+                    sum += h * K21(t_arr[i], t_arr[j]) * g1.ElementAt(j);
+                    sum += h * K22(t_arr[i], t_arr[j]) * g2.ElementAt(j);
+                }
+                sum += Phi2(t_arr[i]);
+                return sum;
+            }
+
+            for (int i = 1; i < num; i = i + 1)
+            {
+                double E_i = E(i, ref g_1, ref g_2, ref t);
+                double F_i = F(i, ref g_1, ref g_2, ref t);
+                double A_i = A(t[i]);
+                double B_i = B(t[i]);
+                double C_i = C(t[i]);
+                double D_i = D(t[i]);
+                double Delta_i = A_i * D_i - C_i * B_i;
+                double g1i = (E_i*D_i - F_i * B_i) / Delta_i;
+                g_1.Add(g1i);
+                double g2i = (E_i * C_i - F_i * A_i) / -Delta_i;
+                g_2.Add(g2i);
+            }
+        }
+
+        public void SolveUsingRiemannSum_old(out List<double> g_1, out List<double> g_2, out double[] t)
+        {
+            t = Make_t_Array();
+            g_1 = new List<double>();
+            g_2 = new List<double>();
+
+            g_1.Add(Phi1(t[0]));
+            g_2.Add(Phi2(t[0]));
+
             for (int i = 1; i < num; i = i + 1)
             {
                 double sum_11 = 0;

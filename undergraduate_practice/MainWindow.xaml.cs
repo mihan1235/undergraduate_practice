@@ -27,7 +27,12 @@ namespace undergraduate_practice
             task = new Volter2System();
             task.Phi1 = (t) =>
             {
-                return -Pow(t, 3.0f) / 6.0f - Pow(t, 2.0f) / 2.0f;
+                //return -Pow(t, 3.0f) / 6.0f - Pow(t, 2.0f) / 2.0f;
+                double sum = 0;
+                double t0 = task.T0;
+                sum += -Pow(t, 3.0f) / 6.0f - Pow(t, 2.0f) / 2.0f + t / 2.0f * Pow(t0, 2.0f);
+                sum += -Pow(t0, 3.0f) / 3.0f + Pow(t0, 2.0f) / 2.0f + t0;
+                return sum;
             };
 
 
@@ -43,8 +48,12 @@ namespace undergraduate_practice
 
             task.Phi2 = (t) =>
             {
-                //return t+1-5/3*Pow(t,3)-3/2*Pow(t,2);
-                return -13.0f / 6.0f * Pow(t, 3.0f) - Pow(t, 2.0f) + t + 1.0f;
+                double sum = 0;
+                double t0 = task.T0;
+                sum += -13.0f / 6.0f * Pow(t, 3.0f) - Pow(t, 2.0f) + 3.0f / 2.0f * t * Pow(t0, 2.0f);
+                sum += t * t0 + t + 2.0f / 3.0f * Pow(t0, 3.0f) + 1.0f;
+                return sum;
+                //return -13.0f / 6.0f * Pow(t, 3.0f) - Pow(t, 2.0f) + t + 1.0f;
             };
 
             task.K21 = (t, tau) =>
@@ -105,7 +114,17 @@ namespace undergraduate_practice
                 task.SetTimeRange(t0, t1);
                 task.GridSpacing = h;
                 double[] t_arr;
-                task.SolveUsingRiemannSum(out List<double> g1, out List<double> g2, out t_arr);
+                List<double> g1;
+                List<double> g2;
+                if (checkBox1.IsChecked == true)
+                {
+                    task.SolveUsingRiemannSum_old(out g1, out g2, out t_arr);
+                }
+                else
+                {
+                    task.SolveUsingRiemannSum(out g1, out g2, out t_arr);
+                }
+                
                 var Model = (MainViewModel)this.DataContext;
                 Model.UpdateModel(g1, g2, t_arr, task.T0, task.T1, task.GridSpacing);
                 t_array.ItemsSource = ConvertToNumerated(t_arr.ToList());
