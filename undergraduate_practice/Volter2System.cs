@@ -140,37 +140,25 @@ namespace undergraduate_practice
 
             for (int i = 1; i < num; i = i + 1)
             {
-                double sum_11 = 0;
+                double sum_1 = 0;
 
                 for (int k = 0; k <= i - 1; k = k + 1)
                 {
-                    sum_11 += K11(t[i], t[k]) * g_1.ElementAt(k) * h;
+                    sum_1 += K11(t[i], t[k]) * g_1.ElementAt(k) * h;
+                    sum_1 += K12(t[i], t[k]) * g_2.ElementAt(k) * h;
                 }
 
-                double sum_12 = 0;
+                g_1.Add(sum_1 + Phi1(t[i]));
+
+                double sum_2 = 0;
 
                 for (int k = 0; k <= i - 1; k++)
                 {
-                    sum_12 += K12(t[i], t[k]) * g_2.ElementAt(k) * h;
+                    sum_2 += K21(t[i], t[k]) * g_1.ElementAt(k) * h;
+                    sum_2 += K22(t[i], t[k]) * g_2.ElementAt(k) * h;
                 }
 
-                g_1.Add(sum_11 + sum_12 + Phi1(t[i]));
-
-                double sum_21 = 0;
-
-                for (int k = 0; k <= i - 1; k++)
-                {
-                    sum_21 += K21(t[i], t[k]) * g_1.ElementAt(k) * h;
-                }
-
-                double sum_22 = 0;
-
-                for (int k = 0; k <= i - 1; k++)
-                {
-                    sum_22 += K22(t[i], t[k]) * g_2.ElementAt(k) * h;
-                }
-
-                g_2.Add(sum_21 + sum_22 + Phi2(t[i]));
+                g_2.Add(sum_2 + Phi2(t[i]));
             }
         }
     }
