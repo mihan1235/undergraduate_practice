@@ -65,8 +65,8 @@ namespace undergraduate_practice
             }
         }
 
-        public double T0 { get; private set; } = 2.0f;
-        public double T1 { get; private set; } = 3.0f;
+        public double T0 { get; private set; } = 2.0d;
+        public double T1 { get; private set; } = 3.0d;
         public void SetTimeRange(double a, double b)
         {
             this.T0 = a;

@@ -19,52 +19,99 @@ namespace undergraduate_practice
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
+    using static Derivative; 
     public partial class MainWindow : Window
     {
         Volter2System task;
-        public MainWindow()
+        
+        double h = 0.01d;
+        public static double Alpha {
+            get;
+            private set;
+        } = 1.0d;
+
+        public static double Beta
         {
-            task = new Volter2System();
+            get;
+            private set;
+        } = 2.0d;
+
+        void SetTaskFunctions()
+        {
+            double x1 = 0.5d;
+            double x2 = 1.0d;
+            double a = 1;
+
+            double f1(double x)
+            {
+                return 1 + 0.001d * Pow(x, 2);
+            }
+
+            double f2(double x)
+            {
+                return x + 0.001d * Pow(x, 2);
+            }
+
+            double Delta = f1(x1) * f2(x2) - f1(x2) * f2(x1);
+
+
+            double A(double x, double t, double tau)
+            {
+                return FirstDerivative(f1, x + a * (t - tau), h) - FirstDerivative(f1, x - a * (t - tau),h);
+            }
+
+            double B(double x, double t, double tau)
+            {
+                return FirstDerivative(f2, x + a * (t - tau), h) - FirstDerivative(f2, x - a * (t - tau), h);
+            }
+
+            double P1_2Diff(double t)
+            {
+                return (Alpha + Beta * x1) * t;
+            }
+
+            double P2_2Diff(double t)
+            {
+                return (Alpha + Beta * x2) * t;
+            }
+
             task.Phi1 = (t) =>
             {
-                //return -Pow(t, 3.0f) / 6.0f - Pow(t, 2.0f) / 2.0f;
-                double sum = 0;
-                double t0 = task.T0;
-                sum += -Pow(t, 3.0f) / 6.0f - Pow(t, 2.0f) / 2.0f + t / 2.0f * Pow(t0, 2.0f);
-                sum += -Pow(t0, 3.0f) / 3.0f + Pow(t0, 2.0f) / 2.0f + t0;
-                return sum;
+                return 1.0d / Delta * (P1_2Diff(t) * f2(x2) - P2_2Diff(t) * f2(x1));
             };
 
 
             task.K11 = (t, tau) =>
             {
-                return t - tau;
+                return a / -2 * Delta * (f2(x2)*A(x1,t,tau) - f2(x1) * A(x2,t,tau));
             };
 
             task.K12 = (t, tau) =>
             {
-                return 1.0f;
+                return a / -2 * Delta * (f2(x2) * B(x1, t, tau) - f2(x1) * B(x2, t, tau));
             };
 
             task.Phi2 = (t) =>
             {
-                double sum = 0;
-                double t0 = task.T0;
-                sum += -13.0f / 6.0f * Pow(t, 3.0f) - Pow(t, 2.0f) + 3.0f / 2.0f * t * Pow(t0, 2.0f);
-                sum += t * t0 + t + 2.0f / 3.0f * Pow(t0, 3.0f) + 1.0f;
-                return sum;
-                //return -13.0f / 6.0f * Pow(t, 3.0f) - Pow(t, 2.0f) + t + 1.0f;
+                return 1.0d / -Delta * (P1_2Diff(t) * f1(x2) - P2_2Diff(t) * f1(x1));
             };
 
             task.K21 = (t, tau) =>
             {
-                return 2.0f * (t + tau);
+                return a / 2 * Delta * (f1(x2) * A(x1, t, tau) - f1(x1) * A(x2, t, tau));
             };
 
             task.K22 = (t, tau) =>
             {
-                return t;
+                return a / 2 * Delta * (f1(x2) * B(x1, t, tau) - f1(x1) * B(x2, t, tau));
             };
+        }
+        
+
+        public MainWindow()
+        {
+            task = new Volter2System();
+            SetTaskFunctions();
             InitializeComponent();
         }
 
@@ -108,10 +155,9 @@ namespace undergraduate_practice
             
             try
             {
-                double t0 = double.Parse(this.t0.Text);
                 double t1 = double.Parse(this.t1.Text);
-                double h = double.Parse(GridSpaceText.Text);
-                task.SetTimeRange(t0, t1);
+                h = double.Parse(GridSpaceText.Text);
+                task.SetTimeRange(0, t1);
                 task.GridSpacing = h;
                 double[] t_arr;
                 task.SolveUsingRiemannSum(out List<double> g1, out List<double> g2, out t_arr);

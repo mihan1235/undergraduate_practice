@@ -30,14 +30,6 @@
                             <Border Margin="12,8" BorderThickness="1" BorderBrush="SteelBlue" 
                                     CornerRadius="4" MinWidth="200" HorizontalAlignment="Left" >
                                 <DockPanel Margin="2">
-                                    <Label Content="t0:"></Label>
-                                    <TextBox Name="t0" MinWidth="200">
-                                    </TextBox>
-                                </DockPanel>
-                            </Border>
-                            <Border Margin="12,8" BorderThickness="1" BorderBrush="SteelBlue" 
-                                    CornerRadius="4" MinWidth="200" HorizontalAlignment="Left" >
-                                <DockPanel Margin="2">
                                     <Label Content="t1:"></Label>
                                     <TextBox Name="t1" MinWidth="200">
                                     </TextBox>
