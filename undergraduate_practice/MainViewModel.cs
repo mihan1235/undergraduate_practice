@@ -33,8 +33,8 @@ namespace undergraduate_practice
             this.MyModel = new PlotModel { Title = "Inverse Problem" };
             AddLineSeries(g1, "g1(t)", t_arr);
             AddLineSeries(g2, "g2(t)", t_arr);
-            //TestFunc((t) => Alpha * t, t_0, t_1, h, "g1_test(t)= alpha * t");
-            //TestFunc((t) => Beta * t, t_0, t_1, h, "g2_test(t) = beta * t");
+            TestFunc((t) => Alpha * t, t_0, t_1, h, "g1_test(t)= alpha * t");
+            TestFunc((t) => Beta * t, t_0, t_1, h, "g2_test(t) = beta * t");
             OnPropertyChanged("MyModel");
         }
 

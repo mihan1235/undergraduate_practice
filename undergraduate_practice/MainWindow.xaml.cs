@@ -65,19 +65,30 @@ namespace undergraduate_practice
                 return FirstDerivative(f2, x + a * (t - tau), h) - FirstDerivative(f2, x - a * (t - tau), h);
             }
 
-            double P1_2Diff(double t)
+            //double P1_2Diff(double t)
+            //{
+            //    return (Alpha + Beta * x1) * t;
+            //}
+
+            //double P2_2Diff(double t)
+            //{
+            //    return (Alpha + Beta * x2) * t;
+            //}
+
+            double P1(double t)
             {
-                return (Alpha + Beta * x1) * t;
+                return (Alpha + Beta * x1) * Pow(t, 3.0d) / 6;
             }
 
-            double P2_2Diff(double t)
+            double P2(double t)
             {
-                return (Alpha + Beta * x2) * t;
+                return (Alpha + Beta * x2) * Pow(t, 3.0d) / 6;
             }
 
             task.Phi1 = (t) =>
             {
-                return 1.0d / Delta * (P1_2Diff(t) * f2(x2) - P2_2Diff(t) * f2(x1));
+                return 1.0d / Delta * (SecondDerivative(P1,t,h) * f2(x2) - 
+                    SecondDerivative(P2,t,h) * f2(x1));
             };
 
 
@@ -93,7 +104,8 @@ namespace undergraduate_practice
 
             task.Phi2 = (t) =>
             {
-                return 1.0d / -Delta * (P1_2Diff(t) * f1(x2) - P2_2Diff(t) * f1(x1));
+                return 1.0d / -Delta * (SecondDerivative(P1, t, h) * f1(x2) - 
+                    SecondDerivative(P2, t, h) * f1(x1));
             };
 
             task.K21 = (t, tau) =>
