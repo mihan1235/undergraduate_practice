@@ -28,13 +28,13 @@ namespace undergraduate_practice
         }
 
         public void UpdateModel(List<double> g1, List<double> g2,  double[] t_arr, 
-            double t_0, double t_1, double h)
+            double t_0, double t_1)
         {
             this.MyModel = new PlotModel { Title = "Inverse Problem" };
             AddLineSeries(g1, "g1(t)", t_arr);
             AddLineSeries(g2, "g2(t)", t_arr);
-            TestFunc((t) => Alpha * t, t_0, t_1, h, "g1_test(t)= alpha * t");
-            TestFunc((t) => Beta * t, t_0, t_1, h, "g2_test(t) = beta * t");
+            TestFunc((t) => 1.0d / 2.0d * t, t_0, t_1, h, "g1_test(t)= 1/2 * t");
+            TestFunc((t) => Math.Exp(-0.5d*t), t_0, t_1, h, "g2_test(t) = e^{-0.5t}");
             OnPropertyChanged("MyModel");
         }
 

@@ -23,33 +23,27 @@ namespace undergraduate_practice
     public partial class MainWindow : Window
     {
         Volter2System task;
-        
-        double h = 0.01d;
-        public static double Alpha {
-            get;
-            private set;
-        } = 1.0d;
 
-        public static double Beta
+        public static double h
         {
             get;
             private set;
-        } = 2.0d;
-
+        } = 0.01d;
+    
         void SetTaskFunctions()
         {
-            double x1 = 0.5d;
-            double x2 = 1.0d;
+            double x1 = 0.0d;
+            double x2 = PI/2.0d;
             double a = 1;
 
             double f1(double x)
             {
-                return 1 + 0.001d * Pow(x, 2);
+                return Cos(x);
             }
 
             double f2(double x)
             {
-                return x + 0.001d * Pow(x, 2);
+                return Sin(x);
             }
 
             double Delta = f1(x1) * f2(x2) - f1(x2) * f2(x1);
@@ -65,24 +59,20 @@ namespace undergraduate_practice
                 return FirstDerivative(f2, x + a * (t - tau), h) - FirstDerivative(f2, x - a * (t - tau), h);
             }
 
-            //double P1_2Diff(double t)
-            //{
-            //    return (Alpha + Beta * x1) * t;
-            //}
-
-            //double P2_2Diff(double t)
-            //{
-            //    return (Alpha + Beta * x2) * t;
-            //}
-
             double P1(double t)
             {
-                return (Alpha + Beta * x1) * Pow(t, 3.0d) / 6;
+                double sum = 0;
+                sum += Cos(x1) * (a * t - Sin(a * t)) / (2 * Pow(a, 3));
+                sum += Sin(x1)*(a*Exp(-0.5d*t) + 0.5d * Sin(a*t) -a*Cos(a*t)) / (a*(Pow(a,2)+0.25d));
+                return sum;
             }
 
             double P2(double t)
             {
-                return (Alpha + Beta * x2) * Pow(t, 3.0d) / 6;
+                double sum = 0;
+                sum += Cos(x2) * (a * t - Sin(a * t)) / (2 * Pow(a, 3));
+                sum += Sin(x2) * (a * Exp(-0.5d * t) + 0.5d * Sin(a * t) - a * Cos(a * t)) / (a * (Pow(a, 2) + 0.25d));
+                return sum;
             }
 
             task.Phi1 = (t) =>
@@ -174,7 +164,7 @@ namespace undergraduate_practice
                 double[] t_arr;
                 task.SolveUsingRiemannSum(out List<double> g1, out List<double> g2, out t_arr);
                 var Model = (MainViewModel)this.DataContext;
-                Model.UpdateModel(g1, g2, t_arr, task.T0, task.T1, task.GridSpacing);
+                Model.UpdateModel(g1, g2, t_arr, task.T0, task.T1);
                 t_array.ItemsSource = ConvertToNumerated(t_arr.ToList());
                 g1_array.ItemsSource = ConvertToNumerated(g1);
                 g2_array.ItemsSource = ConvertToNumerated(g2);
