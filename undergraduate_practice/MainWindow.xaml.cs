@@ -19,7 +19,7 @@ namespace undergraduate_practice
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    using static Derivative; 
+    using static Derivative;
     public partial class MainWindow : Window
     {
         Volter2System task;
@@ -29,11 +29,21 @@ namespace undergraduate_practice
             get;
             private set;
         } = 0.01d;
-    
+
+        double RadToDeg(double rad)
+        {
+            return (rad * 180.0d) / Math.PI;
+        }
+
+        double DegToRad(double deg)
+        {
+            return (Math.PI * deg) / 180.0d;
+        }
+
         void SetTaskFunctions()
         {
             double x1 = 0.0d;
-            double x2 = PI/2.0d;
+            double x2 = DegToRad(1.0d);
             double a = 1;
 
             double f1(double x)
@@ -51,7 +61,7 @@ namespace undergraduate_practice
 
             double A(double x, double t, double tau)
             {
-                return FirstDerivative(f1, x + a * (t - tau), h) - FirstDerivative(f1, x - a * (t - tau),h);
+                return FirstDerivative(f1, x + a * (t - tau), h) - FirstDerivative(f1, x - a * (t - tau), h);
             }
 
             double B(double x, double t, double tau)
@@ -63,7 +73,7 @@ namespace undergraduate_practice
             {
                 double sum = 0;
                 sum += Cos(x1) * (a * t - Sin(a * t)) / (2 * Pow(a, 3));
-                sum += Sin(x1)*(a*Exp(-0.5d*t) + 0.5d * Sin(a*t) -a*Cos(a*t)) / (a*(Pow(a,2)+0.25d));
+                sum += Sin(x1) * (a * Exp(-0.5d * t) + 0.5d * Sin(a * t) - a * Cos(a * t)) / (a * (Pow(a, 2) + 0.25d));
                 return sum;
             }
 
@@ -77,14 +87,14 @@ namespace undergraduate_practice
 
             task.Phi1 = (t) =>
             {
-                return 1.0d / Delta * (SecondDerivative(P1,t,h) * f2(x2) - 
-                    SecondDerivative(P2,t,h) * f2(x1));
+                return 1.0d / Delta * (SecondDerivative(P1, t, h) * f2(x2) -
+                    SecondDerivative(P2, t, h) * f2(x1));
             };
 
 
             task.K11 = (t, tau) =>
             {
-                return a / -2 * Delta * (f2(x2)*A(x1,t,tau) - f2(x1) * A(x2,t,tau));
+                return a / -2 * Delta * (f2(x2) * A(x1, t, tau) - f2(x1) * A(x2, t, tau));
             };
 
             task.K12 = (t, tau) =>
@@ -94,7 +104,7 @@ namespace undergraduate_practice
 
             task.Phi2 = (t) =>
             {
-                return 1.0d / -Delta * (SecondDerivative(P1, t, h) * f1(x2) - 
+                return 1.0d / -Delta * (SecondDerivative(P1, t, h) * f1(x2) -
                     SecondDerivative(P2, t, h) * f1(x1));
             };
 
@@ -108,7 +118,7 @@ namespace undergraduate_practice
                 return a / 2 * Delta * (f1(x2) * B(x1, t, tau) - f1(x1) * B(x2, t, tau));
             };
         }
-        
+
 
         public MainWindow()
         {
@@ -147,14 +157,14 @@ namespace undergraduate_practice
             foreach (var obj in list)
             {
                 i++;
-                list_num.Add(new NumratedData(i,obj));
+                list_num.Add(new NumratedData(i, obj));
             }
             return list_num;
         }
 
         private void CountButton_Click(object sender, RoutedEventArgs e)
         {
-            
+
             try
             {
                 double t1 = double.Parse(this.t1.Text);
@@ -169,7 +179,8 @@ namespace undergraduate_practice
                 g1_array.ItemsSource = ConvertToNumerated(g1);
                 g2_array.ItemsSource = ConvertToNumerated(g2);
             }
-            catch{
+            catch
+            {
 
             }
         }
