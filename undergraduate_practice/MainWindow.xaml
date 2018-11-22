@@ -43,6 +43,18 @@
                                     </TextBox>
                                 </DockPanel>
                             </Border>
+                            <Border Margin="12,8" BorderThickness="1" BorderBrush="SteelBlue" 
+                                    CornerRadius="4" HorizontalAlignment="Left">
+                                <DockPanel Margin="2">
+                                    <Label Content="Delta_Test:"></Label>
+                                    <TextBox Name="DeltaText" MinWidth="150">
+                                    </TextBox>
+                                </DockPanel>
+                            </Border>
+                            <CheckBox x:Name="checkBox1" 
+                                      IsChecked="False" 
+                                      Content="Bad p(t)"
+                                      Margin="12,8"/>
                             <Button  Content="Count" Margin="12" HorizontalAlignment="Center"
                                      Name="CountButton" Click="CountButton_Click"></Button>
                         </StackPanel>

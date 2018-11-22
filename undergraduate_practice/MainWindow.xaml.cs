@@ -20,6 +20,7 @@ namespace undergraduate_practice
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
     using static Derivative;
+    using static Rand;
     public partial class MainWindow : Window
     {
         Volter2System task;
@@ -40,10 +41,14 @@ namespace undergraduate_practice
             return (Math.PI * deg) / 180.0d;
         }
 
+        bool bad_p_t = false;
+        double delta = default(double);
+        double inaccuracy = RandomDouble(-1, 1);
+
         void SetTaskFunctions()
         {
             double x1 = 0.0d;
-            double x2 = DegToRad(1.0d);
+            double x2 = DegToRad(90.0d);
             double a = 1;
 
             double f1(double x)
@@ -69,11 +74,17 @@ namespace undergraduate_practice
                 return FirstDerivative(f2, x + a * (t - tau), h) - FirstDerivative(f2, x - a * (t - tau), h);
             }
 
+            
+
             double P1(double t)
             {
                 double sum = 0;
                 sum += Cos(x1) * (a * t - Sin(a * t)) / (2 * Pow(a, 3));
                 sum += Sin(x1) * (a * Exp(-0.5d * t) + 0.5d * Sin(a * t) - a * Cos(a * t)) / (a * (Pow(a, 2) + 0.25d));
+                if (bad_p_t == true)
+                {
+                    sum += delta*RandomDouble(-1,1);
+                }
                 return sum;
             }
 
@@ -82,6 +93,10 @@ namespace undergraduate_practice
                 double sum = 0;
                 sum += Cos(x2) * (a * t - Sin(a * t)) / (2 * Pow(a, 3));
                 sum += Sin(x2) * (a * Exp(-0.5d * t) + 0.5d * Sin(a * t) - a * Cos(a * t)) / (a * (Pow(a, 2) + 0.25d));
+                if (bad_p_t == true)
+                {
+                    sum += delta* RandomDouble(-1, 1);
+                }
                 return sum;
             }
 
@@ -169,6 +184,15 @@ namespace undergraduate_practice
             {
                 double t1 = double.Parse(this.t1.Text);
                 h = double.Parse(GridSpaceText.Text);
+                if (checkBox1.IsChecked == true)
+                {
+                    delta = double.Parse(DeltaText.Text);
+                    bad_p_t = true;
+                }
+                else
+                {
+                    bad_p_t = false;
+                }
                 task.SetTimeRange(0, t1);
                 task.GridSpacing = h;
                 double[] t_arr;
