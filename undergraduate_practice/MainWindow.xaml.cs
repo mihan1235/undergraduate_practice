@@ -74,8 +74,8 @@ namespace undergraduate_practice
                 return FirstDerivative(f2, x + a * (t - tau), h) - FirstDerivative(f2, x - a * (t - tau), h);
             }
 
-            
 
+            Dictionary<double, double> p1_dictionary = new Dictionary<double, double>();
             double P1(double t)
             {
                 double sum = 0;
@@ -83,11 +83,17 @@ namespace undergraduate_practice
                 sum += Sin(x1) * (a * Exp(-0.5d * t) + 0.5d * Sin(a * t) - a * Cos(a * t)) / (a * (Pow(a, 2) + 0.25d));
                 if (bad_p_t == true)
                 {
-                    sum += delta*RandomDouble(-1,1);
+                    double random_value;
+                    if (p1_dictionary.TryGetValue(t, out random_value) == false)
+                    {
+                        p1_dictionary[t] = RandomDouble(-1, 1);
+                    }
+                    sum += delta * p1_dictionary[t];
                 }
                 return sum;
             }
 
+            Dictionary<double, double> p2_dictionary = new Dictionary<double, double>();
             double P2(double t)
             {
                 double sum = 0;
@@ -95,7 +101,12 @@ namespace undergraduate_practice
                 sum += Sin(x2) * (a * Exp(-0.5d * t) + 0.5d * Sin(a * t) - a * Cos(a * t)) / (a * (Pow(a, 2) + 0.25d));
                 if (bad_p_t == true)
                 {
-                    sum += delta* RandomDouble(-1, 1);
+                    double random_value;
+                    if (p2_dictionary.TryGetValue(t, out random_value) == false)
+                    {
+                        p2_dictionary[t] = RandomDouble(-1, 1);
+                    }
+                    sum += delta * p2_dictionary[t];
                 }
                 return sum;
             }
