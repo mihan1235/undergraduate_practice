@@ -43,7 +43,9 @@ namespace undergraduate_practice
 
         bool bad_p_t = false;
         double delta = default(double);
-        double inaccuracy = RandomDouble(-1, 1);
+        //double inaccuracy = RandomDouble(-1, 1);
+        Dictionary<double, double> p1_dictionary = new Dictionary<double, double>();
+        Dictionary<double, double> p2_dictionary = new Dictionary<double, double>();
 
         void SetTaskFunctions()
         {
@@ -74,41 +76,78 @@ namespace undergraduate_practice
                 return FirstDerivative(f2, x + a * (t - tau), h) - FirstDerivative(f2, x - a * (t - tau), h);
             }
 
-
-            Dictionary<double, double> p1_dictionary = new Dictionary<double, double>();
-            double P1(double t)
+            double ExactP1(double t)
             {
                 double sum = 0;
                 sum += Cos(x1) * (a * t - Sin(a * t)) / (2 * Pow(a, 3));
-                sum += Sin(x1) * (a * Exp(-0.5d * t) + 0.5d * Sin(a * t) - a * Cos(a * t)) / (a * (Pow(a, 2) + 0.25d));
-                if (bad_p_t == true)
-                {
-                    double random_value;
-                    if (p1_dictionary.TryGetValue(t, out random_value) == false)
-                    {
-                        p1_dictionary[t] = RandomDouble(-1, 1);
-                    }
-                    sum += delta * p1_dictionary[t];
-                }
+                sum += Sin(x1) * (a * Exp(-0.5d * t) + 0.5d * Sin(a * t) - a * Cos(a * t)) /
+                    (a * (Pow(a, 2) + 0.25d));
                 return sum;
             }
 
-            Dictionary<double, double> p2_dictionary = new Dictionary<double, double>();
-            double P2(double t)
+            double? GetDeltaP1(double t)
+            {
+                if (t < 0)
+                {
+                    return null;
+                }
+                double random_value;
+                if (p1_dictionary.TryGetValue(t, out random_value) == false)
+                {
+                    p1_dictionary[t] = ExactP1(t) + RandomDouble(-1, 1) * delta;
+                }
+                return p1_dictionary[t];
+            }
+
+
+            double P1(double t)
+            {
+                if (bad_p_t == true)
+                {
+                    double? p_delta1 = GetDeltaP1(t - h);
+                    if (p_delta1 == null)
+                    {
+                        return ((double)GetDeltaP1(t) + (double)GetDeltaP1(t + h)) / 2.0d;
+                    }
+                    return ((double)p_delta1 + (double)GetDeltaP1(t) + (double)GetDeltaP1(t + h)) / 3.0d;
+                }
+                return ExactP1(t);
+            }
+
+            double ExactP2(double t)
             {
                 double sum = 0;
                 sum += Cos(x2) * (a * t - Sin(a * t)) / (2 * Pow(a, 3));
-                sum += Sin(x2) * (a * Exp(-0.5d * t) + 0.5d * Sin(a * t) - a * Cos(a * t)) / (a * (Pow(a, 2) + 0.25d));
+                sum += Sin(x2) * (a * Exp(-0.5d * t) + 0.5d * Sin(a * t) - a * Cos(a * t)) /
+                    (a * (Pow(a, 2) + 0.25d));
+                return sum;
+            }
+
+            double? GetDeltaP2(double t)
+            {
+                if (t < 0)
+                {
+                    return null;
+                }
+                double random_value;
+                if (p2_dictionary.TryGetValue(t, out random_value) == false)
+                {
+                    p2_dictionary[t] = ExactP2(t) + delta * RandomDouble(-1, 1);
+                }
+                return p2_dictionary[t];
+            }
+            double P2(double t)
+            {
                 if (bad_p_t == true)
                 {
-                    double random_value;
-                    if (p2_dictionary.TryGetValue(t, out random_value) == false)
+                    double? p_delta1 = GetDeltaP2(t - h);
+                    if (p_delta1 == null)
                     {
-                        p2_dictionary[t] = RandomDouble(-1, 1);
+                        return ((double)GetDeltaP2(t) + (double)GetDeltaP2(t + h)) / 2.0d;
                     }
-                    sum += delta * p2_dictionary[t];
+                    return ((double)p_delta1 + (double)GetDeltaP2(t) + (double)GetDeltaP2(t + h)) / 3.0d;
                 }
-                return sum;
+                return ExactP2(t);
             }
 
             task.Phi1 = (t) =>
@@ -199,6 +238,8 @@ namespace undergraduate_practice
                 {
                     delta = double.Parse(DeltaText.Text);
                     bad_p_t = true;
+                    p1_dictionary.Clear();
+                    p2_dictionary.Clear();
                 }
                 else
                 {
