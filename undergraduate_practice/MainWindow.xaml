@@ -51,6 +51,14 @@
                                     </TextBox>
                                 </DockPanel>
                             </Border>
+                            <Border Margin="12,8" BorderThickness="1" BorderBrush="SteelBlue" 
+                                    CornerRadius="4" HorizontalAlignment="Left">
+                                <DockPanel Margin="2">
+                                    <Label Content="RandomDouble:"></Label>
+                                    <TextBox Name="RandomDoubleText" MinWidth="150">
+                                    </TextBox>
+                                </DockPanel>
+                            </Border>
                             <CheckBox x:Name="checkBox1" 
                                       IsChecked="False" 
                                       Content="Bad p(t)"

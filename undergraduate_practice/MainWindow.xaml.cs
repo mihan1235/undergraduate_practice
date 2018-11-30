@@ -94,7 +94,7 @@ namespace undergraduate_practice
                 double random_value;
                 if (p1_dictionary.TryGetValue(t, out random_value) == false)
                 {
-                    p1_dictionary[t] = ExactP1(t) + RandomDouble(-1, 1) * delta;
+                    p1_dictionary[t] = ExactP1(t) + RandomDouble(-random, random) * delta;
                 }
                 return p1_dictionary[t];
             }
@@ -132,7 +132,7 @@ namespace undergraduate_practice
                 double random_value;
                 if (p2_dictionary.TryGetValue(t, out random_value) == false)
                 {
-                    p2_dictionary[t] = ExactP2(t) + delta * RandomDouble(-1, 1);
+                    p2_dictionary[t] = ExactP2(t) + delta * RandomDouble(-random, random);
                 }
                 return p2_dictionary[t];
             }
@@ -226,7 +226,7 @@ namespace undergraduate_practice
             }
             return list_num;
         }
-
+        double random;
         private void CountButton_Click(object sender, RoutedEventArgs e)
         {
 
@@ -237,6 +237,7 @@ namespace undergraduate_practice
                 if (checkBox1.IsChecked == true)
                 {
                     delta = double.Parse(DeltaText.Text);
+                    random = double.Parse(RandomDoubleText.Text);
                     bad_p_t = true;
                     p1_dictionary.Clear();
                     p2_dictionary.Clear();
